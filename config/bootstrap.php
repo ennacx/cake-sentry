@@ -16,12 +16,12 @@ Log::drop('error');
 Log::setConfig('error', $errorLogConfig);
 Configure::write('Error.errorLogger', ErrorLogger::class);
 
-$isCli = PHP_SAPI === 'cli';
+$isCli = (PHP_SAPI === 'cli');
+
 if (!$isCli && strpos((env('argv')[0] ?? ''), '/phpunit') !== false) {
     $isCli = true;
 }
-if ($isCli) {
-    (new ExceptionTrap(Configure::read('Error', [])))->register();
-} else {
-    (new ErrorTrap(Configure::read('Error', [])))->register();
-}
+
+$config = Configure::read('Error', []);
+$trap = ($isCli) ? new ExceptionTrap($config) : new ErrorTrap($config);
+$trap->register();
