@@ -18,7 +18,7 @@ Configure::write('Error.errorLogger', ErrorLogger::class);
 
 $isCli = (PHP_SAPI === 'cli');
 
-if (!$isCli && strpos((env('argv')[0] ?? ''), '/phpunit') !== false) {
+if (!$isCli && str_contains(($_SERVER['argv'][0] ?? ''), '/phpunit')) {
     $isCli = true;
 }
 
